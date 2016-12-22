@@ -75,13 +75,12 @@
             /*
                 Core formula:
                     dotPosY = (boxHeight - (circleRadius - Math.sqrt(circleRadius**2 - mosPosX**2))) - dotHalfWidth
-                    ** dotPosY must be negative if using translate3d()
-
-                    (dotHalfWidth is to center the dot on the circle bounds)
+                    >> dotPosY must be negative if using translate3d()
+                    >> dotHalfWidth is to center the dot on the circle bounds)
 
 
                 TODO:
-                   > dotPosX overflows x-bounds of containing box when dot-mouseover
+                   >> dotPosX overflows x-bounds of containing box when dot-mouseover
             */
 
             function calcDotPos(event){
