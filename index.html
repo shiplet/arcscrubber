@@ -60,6 +60,7 @@
             var box = document.getElementById('box')
 
 
+            // Create reference points for circle
             var left = circle.offsetLeft + circle.clientLeft
             var top = circle.offsetTop + circle.clientTop
             var diameter = circle.offsetWidth
@@ -69,6 +70,16 @@
             var mosPosX, dotPosY, dotPosX
 
             box.addEventListener('mousemove', calcDotPos, false)
+
+
+            /*
+                Core formula:
+                    dotPosY = (boxHeight - (circleRadius - Math.sqrt(circleRadius**2 - mosPosX**2))) - dotHalfWidth // to center dot
+
+
+                TODO:
+                   > dotPosX overflows x-bounds of containing box when dot-mouseover
+            */
 
             function calcDotPos(event){
                 event.stopPropagation()
