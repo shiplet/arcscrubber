@@ -4,24 +4,24 @@
     <title>Arc Scrubber</title>
     <style type="text/css">
         #circle {
-            height: 800px;
-            width: 800px;
+            height: 25vw;
+            width: 25vw;
             border: 1px solid black;
             border-radius: 50%;
             margin: 0 auto;
-            margin-top: calc((100vh - 800px)/2);
+            margin-top: calc((100vh - 25vw)/2);
             box-sizing: border-box;
             position: relative;
             z-index: 0;
         }
 
         #box {
-            width: 400px;
-            height: 75px;
+            width: 12.5vw;
+            height: 4.6875vw;
             box-sizing: border-box;
             border: 1px solid black;
             position: absolute;
-            top: calc((100vh - 800px)/2);
+            top: calc((100vh - 25vw)/2);
             right: 0;
             left: 0;
             margin: 0 auto;
@@ -29,8 +29,8 @@
         }
 
         #dot {
-            height: 25px;
-            width: 25px;
+            height: 1.5625vw;
+            width: 1.5625vw;
             background-color: black;
             border-radius: 50%;
             position: absolute;
@@ -61,14 +61,12 @@
 
 
             // Create reference points for circle
-            var left = circle.offsetLeft + circle.clientLeft
-            var top = circle.offsetTop + circle.clientTop
-            var diameter = circle.offsetWidth
-            var radius = diameter / 2
-            var center = (left + (left + diameter)) / 2
-
+            var left, top, diameter, radius, center
             var mosPosX, dotPosY, dotPosX
 
+            calcView()
+
+            window.addEventListener('resize', calcView, false)
             box.addEventListener('mousemove', calcDotPos, false)
 
 
@@ -85,12 +83,21 @@
                    >> dotPosX overflows x-bounds of containing box when dot-mouseover
             */
 
-            function calcDotPos(event){
+            function calcDotPos(){
                 event.stopPropagation()
                 mosPosX = center - event.clientX
                 dotPosY = -((box.offsetHeight - (radius - Math.sqrt(radius**2 - mosPosX**2))) - (dot.offsetWidth/2))
                 dotPosX = (Math.min(event.clientX - left, diameter) - ((box.offsetWidth/2) + (dot.offsetWidth/2)))
                 dot.style.transform = 'translate3d('+dotPosX+'px, '+dotPosY+'px, 0)'
+            }
+
+            function calcView(event) {
+               left = circle.offsetLeft + circle.clientLeft
+               top = circle.offsetTop + circle.clientTop
+               diameter = circle.offsetWidth
+               radius = diameter / 2
+               center = (left + (left + diameter)) / 2
+               dot.style.transform = 'translate3d(0,0,0)'
             }
 
         }, false)
