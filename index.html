@@ -58,6 +58,7 @@
             var circle = document.getElementById('circle')
             var dot = document.getElementById('dot')
             var box = document.getElementById('box')
+            var dragging = false
 
 
             // Create reference points for circle
@@ -65,9 +66,12 @@
             var mosPosX, dotPosY, dotPosX
 
             calcView()
+            dotPos(0)
 
             window.addEventListener('resize', calcView, false)
             box.addEventListener('mousemove', calcDotPos, false)
+            dot.addEventListener('mousedown', activateDot, false)
+            box.addEventListener('mouseup', deactivateDot, false)
 
 
             /*
@@ -83,12 +87,24 @@
                    >> dotPosX overflows x-bounds of containing box when dot-mouseover
             */
 
-            function calcDotPos(){
-                event.stopPropagation()
+            function activateDot() {
+                dragging = true
+            }
+
+            function deactivateDot() {
+                dragging = false
+            }
+
+            function dotPos(mosPos) {
+                event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
                 mosPosX = center - event.clientX
                 dotPosY = -((box.offsetHeight - (radius - Math.sqrt(radius**2 - mosPosX**2))) - (dot.offsetWidth/2))
                 dotPosX = (Math.min(event.clientX - left, diameter) - ((box.offsetWidth/2) + (dot.offsetWidth/2)))
                 dot.style.transform = 'translate3d('+dotPosX+'px, '+dotPosY+'px, 0)'
+            }
+
+            function calcDotPos(){
+                if(dragging) { dotPos() }
             }
 
             function calcView(event) {
@@ -97,7 +113,6 @@
                diameter = circle.offsetWidth
                radius = diameter / 2
                center = (left + (left + diameter)) / 2
-               dot.style.transform = 'translate3d(0,0,0)'
             }
 
         }, false)
