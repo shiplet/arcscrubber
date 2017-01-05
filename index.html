@@ -73,19 +73,16 @@
             var box = document.getElementById('box')
             var dragging = false
 
-
             // Create reference points for circle
             var left, top, diameter, radius, center
             var mosPosX, dotPosY, dotPosX
+
+            // Create dotPos limiters
             var minY, minX, maxX
 
             calcView()
             dotPos(null, 0)
-
-            window.addEventListener('resize', calcView)
-            box.addEventListener('mousemove', shouldDotMove)
-            dot.addEventListener('mousedown', activateDot)
-            document.addEventListener('mouseup', deactivateDot)
+            createListeners()
 
 
             /*
@@ -101,6 +98,18 @@
             function deactivateDot() { dragging = false }
             function shouldDotMove(event){ if(dragging) { dotPos(event) } }
 
+            function calcView(event) {
+               left = circle.offsetLeft + circle.clientLeft
+               top = circle.offsetTop + circle.clientTop
+               diameter = circle.offsetWidth
+               radius = diameter / 2
+               center = (left + (left + diameter)) / 2
+               minY = box.offsetWidth / 2
+               minX = -(dot.offsetWidth/2)
+               maxX = box.offsetWidth - (dot.offsetWidth/2)
+               dotPos(null, 0)
+            }
+
             function dotPos(event, mosPos) {
                 event = event || {}
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
@@ -112,17 +121,11 @@
                 dot.style.transform = 'translate3d('+dotPosX+'px, '+dotPosY+'px, 0)'
             }
 
-
-            function calcView(event) {
-               left = circle.offsetLeft + circle.clientLeft
-               top = circle.offsetTop + circle.clientTop
-               diameter = circle.offsetWidth
-               radius = diameter / 2
-               center = (left + (left + diameter)) / 2
-               minY = box.offsetWidth / 2
-               minX = -(dot.offsetWidth/2)
-               maxX = box.offsetWidth - (dot.offsetWidth/2)
-               dotPos(null, 0)
+            function createListeners() {
+                window.addEventListener('resize', calcView)
+                box.addEventListener('mousemove', shouldDotMove)
+                dot.addEventListener('mousedown', activateDot)
+                document.addEventListener('mouseup', deactivateDot)
             }
 
         }, false)
