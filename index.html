@@ -77,14 +77,15 @@
             // Create reference points for circle
             var left, top, diameter, radius, center
             var mosPosX, dotPosY, dotPosX
+            var minY, minX, maxX
 
             calcView()
             dotPos(null, 0)
 
-            window.addEventListener('resize', calcView, false)
-            box.addEventListener('mousemove', calcDotPos, false)
-            dot.addEventListener('mousedown', activateDot, false)
-            document.addEventListener('mouseup', deactivateDot, false)
+            window.addEventListener('resize', calcView)
+            box.addEventListener('mousemove', shouldDotMove)
+            dot.addEventListener('mousedown', activateDot)
+            document.addEventListener('mouseup', deactivateDot)
 
 
             /*
@@ -100,26 +101,21 @@
                    >> dotPosX overflows x-bounds of containing box when dot-mouseover
             */
 
-            function activateDot() {
-                dragging = true
-            }
-
-            function deactivateDot() {
-                dragging = false
-            }
+            function activateDot() { dragging = true }
+            function deactivateDot() { dragging = false }
+            function shouldDotMove(event){ if(dragging) { dotPos(event) } }
 
             function dotPos(event, mosPos) {
                 event = event || {}
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
-                mosPosX = center - event.clientX
-                dotPosY = -((box.offsetHeight - (radius - Math.sqrt(Math.pow(radius,2) - Math.pow(mosPosX,2)))) - (dot.offsetWidth/2))
-                dotPosX = (Math.min(event.clientX - left, diameter) - ((box.offsetWidth/2) + (dot.offsetWidth/2)))
+                mosPosX = event.clientX - center
+                dotPosY = -( ( box.offsetHeight - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
+                dotPosX = (event.clientX - left) - ((box.offsetWidth/2) + (dot.offsetWidth/2))
+                if(dotPosX <= minX) { dotPosX = minX }
+                if(dotPosX >= maxX) { dotPosX = maxX }
                 dot.style.transform = 'translate3d('+dotPosX+'px, '+dotPosY+'px, 0)'
             }
 
-            function calcDotPos(event){
-                if(dragging) { dotPos(event) }
-            }
 
             function calcView(event) {
                left = circle.offsetLeft + circle.clientLeft
@@ -127,6 +123,10 @@
                diameter = circle.offsetWidth
                radius = diameter / 2
                center = (left + (left + diameter)) / 2
+               minY = box.offsetWidth / 2
+               minX = -(dot.offsetWidth/2)
+               maxX = box.offsetWidth - (dot.offsetWidth/2)
+               dotPos(null, 0)
             }
 
         }, false)
