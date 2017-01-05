@@ -132,7 +132,7 @@
                     >> dotHalfWidth is to center the dot on the circle bounds)
             */
 
-            function activateDot() { dragging = true; console.log('activate!') }
+            function activateDot() { dragging = true }
             function deactivateDot() { dragging = false }
             function shouldDotMove(event){ if(dragging) { dotPos(event) } }
 
@@ -150,7 +150,8 @@
 
             function dotPos(event, mosPos) {
                 event = event || {}
-                event = 'changedTouches' in event ? event.changedTouches[0] : event;
+                event = 'changedTouches' in event ? event.changedTouches[0] : event
+                'preventDefault' in event ? event.preventDefault() : null
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
                 mosPosX = event.clientX - center
                 dotPosY = -( ( box.offsetHeight - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
