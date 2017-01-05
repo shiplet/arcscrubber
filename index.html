@@ -3,27 +3,52 @@
 <head>
     <title>Arc Scrubber</title>
     <style type="text/css">
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #000;
+        }
+
+        body {
+            overflow-x: hidden;
+            margin: 0 auto;
+        }
+
+        .container {
+            position: relative;
+            top: 80vh;
+        }
+
+        .circle-container {
+            height: 7.5vw;
+            overflow: hidden;
+            position: relative;
+        }
+
         #circle {
-            height: 25vw;
-            width: 25vw;
-            border: 1px solid black;
+            height: 300vw;
+            width: 300vw;
+            border: 2px solid rgba(255,255,255,0.5);
             border-radius: 50%;
             margin: 0 auto;
-            margin-top: calc((100vh - 25vw)/2);
             box-sizing: border-box;
-            position: relative;
+            position: absolute;
             z-index: 0;
+            left: -100vw;
         }
 
         #box {
-            width: 12.5vw;
-            height: 4.6875vw;
+            width: calc(300vw / 2);
+            height: 7.5vw;
             box-sizing: border-box;
             /*border: 1px solid black;*/
             position: absolute;
-            top: calc((100vh - 25vw)/2);
+            top: 0;
             right: 0;
-            left: 0;
+            left: -25vw;
             margin: 0 auto;
             z-index: 1;
         }
@@ -31,8 +56,10 @@
         #dot {
             height: 1.5625vw;
             width: 1.5625vw;
-            background-color: black;
-            border-radius: 50%;
+            min-height: 45px;
+            min-width: 45px;
+            background-color: white;
+            border-radius: 0;
             position: absolute;
             bottom: 0;
             left: 0;
@@ -50,16 +77,21 @@
             cursor: -o-grabbing;
             cursor: grabbing;
         }
+
     </style>
 </head>
 <body>
 
 
 
-    <div id="circle">
-    </div>
-    <div id="box">
-        <div id="dot"></div>
+    <div class="container">
+        <div class="circle-container">
+            <div id="circle">
+            </div>
+        </div>
+        <div id="box">
+            <div id="dot"></div>
+        </div>
     </div>
 
 
@@ -116,9 +148,10 @@
                 mosPosX = event.clientX - center
                 dotPosY = -( ( box.offsetHeight - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
                 dotPosX = (event.clientX - left) - ((box.offsetWidth/2) + (dot.offsetWidth/2))
+                // console.log('dot: ', dotPosX)
                 if(dotPosX <= minX) { dotPosX = minX }
                 if(dotPosX >= maxX) { dotPosX = maxX }
-                dot.style.transform = 'translate3d('+dotPosX+'px, '+dotPosY+'px, 0)'
+                dot.style.transform = 'translate3d('+dotPosX+'px, '+dotPosY+'px, 0) rotate3d(0,0,1,45deg)'
             }
 
             function createListeners() {
