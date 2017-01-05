@@ -60,8 +60,8 @@
         #dot {
             height: 1.5625vw;
             width: 1.5625vw;
-            min-height: 25px;
-            min-width: 25px;
+            min-height: 45px;
+            min-width: 45px;
             background-color: white;
             border-radius: 0;
             position: absolute;
@@ -148,6 +148,7 @@
 
             function dotPos(event, mosPos) {
                 event = event || {}
+                console.log(event)
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
                 mosPosX = event.clientX - center
                 dotPosY = -( ( box.offsetHeight - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
