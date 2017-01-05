@@ -7,8 +7,6 @@
         html, body {
             margin: 0;
             padding: 0;
-            height: 100%;
-            width: 100%;
             background-color: #000;
         }
 
@@ -60,8 +58,6 @@
         #dot {
             height: 1.5625vw;
             width: 1.5625vw;
-            min-height: 45px;
-            min-width: 45px;
             background-color: white;
             border-radius: 0;
             position: absolute;
@@ -80,6 +76,13 @@
             cursor: -ms-grabbing;
             cursor: -o-grabbing;
             cursor: grabbing;
+        }
+
+        @media all and (max-width: 1000px) {
+            #dot {
+                height: 50px;
+                width: 50px;
+            }
         }
 
     </style>
@@ -131,7 +134,7 @@
 
             function activateDot() { dragging = true; console.log('activate!') }
             function deactivateDot() { dragging = false }
-            function shouldDotMove(event){ console.log('drag/touch'); if(dragging) { dotPos(event) } }
+            function shouldDotMove(event){ if(dragging) { dotPos(event) } }
 
             function calcView(event) {
                left = circle.offsetLeft + circle.clientLeft
@@ -148,7 +151,6 @@
             function dotPos(event, mosPos) {
                 event = event || {}
                 event = 'changedTouches' in event ? event.changedTouches[0] : event;
-                console.log(event)
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
                 mosPosX = event.clientX - center
                 dotPosY = -( ( box.offsetHeight - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
