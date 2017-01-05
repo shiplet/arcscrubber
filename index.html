@@ -134,7 +134,8 @@
 
             function activateDot() { dragging = true }
             function deactivateDot() { dragging = false }
-            function shouldDotMove(event){ if(dragging) { dotPos(event) } }
+            function shouldDotMove(event) { if(dragging) { dotPos(event) } }
+            function shouldScroll(event) { if(dragging){ event.preventDefault() } }
 
             function calcView(event) {
                left = circle.offsetLeft + circle.clientLeft
@@ -151,12 +152,10 @@
             function dotPos(event, mosPos) {
                 event = event || {}
                 event = 'changedTouches' in event ? event.changedTouches[0] : event
-                'preventDefault' in event ? event.preventDefault() : null
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
                 mosPosX = event.clientX - center
                 dotPosY = -( ( box.offsetHeight - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
                 dotPosX = (event.clientX - left) - ((box.offsetWidth/2) + (dot.offsetWidth/2))
-                // console.log('dot: ', dotPosX)
                 if(dotPosX <= minX) { dotPosX = minX }
                 if(dotPosX >= maxX) { dotPosX = maxX }
                 dot.style.transform = 'translate3d('+dotPosX+'px, '+dotPosY+'px, 0) rotate3d(0,0,1,45deg)'
@@ -164,6 +163,7 @@
 
             function createListeners() {
                 window.addEventListener('resize', calcView)
+                window.addEventListener('touchmove', shouldScroll)
 
                 box.addEventListener('mousemove', shouldDotMove)
                 box.addEventListener('touchmove', shouldDotMove)
