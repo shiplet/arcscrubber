@@ -117,7 +117,6 @@
             var minY, minX, maxX
 
             calcView()
-            dotPos(null, 0)
             createListeners()
 
 
@@ -148,6 +147,7 @@
 
             function dotPos(event, mosPos) {
                 event = event || {}
+                event = 'changedTouches' in event ? event.changedTouches[0] : event;
                 console.log(event)
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
                 mosPosX = event.clientX - center
