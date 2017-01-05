@@ -9,3 +9,5 @@ The core formula for connecting the dot, box, and arc is:
     dotPosY = (boxHeight - (arcRadius - Math.sqrt(arcRadius^2 - mosPos^2))) - dotHalfWidth
 
 In this case, the dot is moved via `translate3d()`, so `dotPosY` must be negative. `dotHalfWidth` is to center the dot along the arc.
+
+For a live example, please visit [michaelshiplet.com/projects/arcscrubber/](https://michaelshiplet.com/projects/arcscrubber/)
