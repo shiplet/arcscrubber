@@ -130,9 +130,9 @@
                     >> dotHalfWidth is to center the dot on the circle bounds)
             */
 
-            function activateDot() { dragging = true }
+            function activateDot() { dragging = true; console.log('activate!') }
             function deactivateDot() { dragging = false }
-            function shouldDotMove(event){ if(dragging) { dotPos(event) } }
+            function shouldDotMove(event){ console.log('drag/touch'); if(dragging) { dotPos(event) } }
 
             function calcView(event) {
                left = circle.offsetLeft + circle.clientLeft
@@ -160,9 +160,15 @@
 
             function createListeners() {
                 window.addEventListener('resize', calcView)
+
                 box.addEventListener('mousemove', shouldDotMove)
+                box.addEventListener('touchmove', shouldDotMove)
+
                 dot.addEventListener('mousedown', activateDot)
+                dot.addEventListener('touchstart', activateDot)
+
                 document.addEventListener('mouseup', deactivateDot)
+                document.addEventListener('touchend', deactivateDot)
             }
 
         }, false)
