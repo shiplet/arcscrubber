@@ -8,6 +8,8 @@
             margin: 0;
             padding: 0;
             background-color: #000;
+            height: 100%;
+            width: 100%;
         }
 
         body {
@@ -44,15 +46,17 @@
 
         #box {
             width: calc(300vw / 2);
-            height: 7.5vw;
+            height: 15vw;
+            /*height: 7.5vw;*/
             box-sizing: border-box;
-            /*border: 1px solid black;*/
             position: absolute;
-            top: 5vh;
+            top: 0;
+            /*top: 5vh;*/
             right: 0;
             left: -25vw;
             margin: 0 auto;
             z-index: 1;
+            background-color: rgba(255,255,255,.25);
         }
 
         #dot {
@@ -111,13 +115,13 @@
         document.addEventListener('DOMContentLoaded', function(){
 
 
-            var circle = document.getElementById('circle')
-            var dot = document.getElementById('dot')
-            var box = document.getElementById('box')
+            var circle = window.circle = document.getElementById('circle')
+            var dot = window.dot = document.getElementById('dot')
+            var box = window.box = document.getElementById('box')
             var dragging = false
 
             // Create reference points for circle
-            var left, top, diameter, radius, center
+            var left, top, diameter, radius, center, boxTop
             var mosPosX, dotPosY, dotPosX
 
             // Create dotPos limiters
@@ -130,10 +134,11 @@
             /*
                 Core formula:
 
-                    dotPosY = (boxHeight - (circleRadius - Math.sqrt(circleRadius^2 - mosPosX^2))) - dotHalfWidth
+                    dotPosY = ((boxHeight - (circleTop - boxTop)) - (circleRadius - Math.sqrt(circleRadius^2 - mosPosX^2))) - dotHalfWidth
 
                     >> dotPosY must be negative if using translate3d()
                     >> dotHalfWidth is to center the dot on the circle bounds
+                    >> (circleTop - boxTop) is for any desired upper offset between top of box and top of circle
             */
 
             function activateDot() { dragging = true }
@@ -143,7 +148,8 @@
 
             function calcView(event) {
                left = circle.offsetLeft + circle.clientLeft
-               top = circle.offsetTop + circle.clientTop
+               top = circle.getBoundingClientRect().top - document.body.getBoundingClientRect().top
+               boxTop = box.getBoundingClientRect().top - document.body.getBoundingClientRect().top
                diameter = circle.offsetWidth
                radius = diameter / 2
                center = (left + (left + diameter)) / 2
@@ -158,7 +164,7 @@
                 event = 'changedTouches' in event ? event.changedTouches[0] : event
                 event.clientX = mosPos === 0 ? window.innerWidth / 2 : event.clientX
                 mosPosX = event.clientX - center
-                dotPosY = -( ( box.offsetHeight - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
+                dotPosY = -( ( (box.offsetHeight - (top - boxTop)) - ( radius - Math.sqrt( Math.pow( radius,2 ) - Math.pow( Math.min( Math.abs( mosPosX ), minY ), 2 ) ) ) ) - ( dot.offsetWidth/2 ) )
                 dotPosX = (event.clientX - left) - ((box.offsetWidth/2) + (dot.offsetWidth/2))
                 if(dotPosX <= minX) { dotPosX = minX }
                 if(dotPosX >= maxX) { dotPosX = maxX }
