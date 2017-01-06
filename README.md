@@ -12,4 +12,11 @@ In this case, the dot is moved via `translate3d()`, so `dotPosY` must be negativ
 
 For a live example, please visit [michaelshiplet.com/projects/arcscrubber/](https://michaelshiplet.com/projects/arcscrubber/)
 
-*Note: the `(arcTop - boxTop)` is for an optional vertical offset between the top of the box and the top of the arc*
+**Note:** the `(arcTop - boxTop)` is for an optional vertical offset between the top of the box and the top of the arc. If using this offset, make sure that
+```
+html, body {
+    height: 100%;
+    width: 100%;
+}
+```
+Otherwise the offset will not be calculated correctly.
