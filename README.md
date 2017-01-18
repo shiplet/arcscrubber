@@ -10,8 +10,6 @@ The core formula for connecting the dot, box, and arc is:
 
 In this case, the dot is moved via `translate3d()`, so `dotPosY` must be negative. `dotHalfWidth` is to center the dot along the arc.
 
-For a live example, please visit [michaelshiplet.com/projects/arcscrubber/](https://michaelshiplet.com/projects/arcscrubber/)
-
 **Note:** the `(arcTop - boxTop)` is for an optional vertical offset between the top of the box and the top of the arc. If using this offset, make sure that
 ```
 html, body {
