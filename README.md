@@ -1,4 +1,4 @@
-#ArcScrubber
+# ArcScrubber
 
 This is a proof-of-concept application of traversing an element along the path of an arc. The traversing element (dot), is contained by its parent element (box), which is anchored via absolute positioning to the arc.
 
